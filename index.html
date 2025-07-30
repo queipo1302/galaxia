@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Galaxia Interactiva</title>
+
+  <!-- Tipografías mágicas -->
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      background-color: #000000;
+      overflow: hidden;
+      font-family: 'Dancing Script', cursive;
+      cursor: pointer;
+      perspective: 1000px;
+      transform-style: preserve-3d;
+    }
+
+    .lluvia {
+      position: absolute;
+      animation: caerDesdeClick linear forwards;
+      opacity: 0.85;
+      transform-style: preserve-3d;
+      transform-origin: center;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .corazon-neon {
+      width: 24px;
+      height: 24px;
+      background: #00f7ff;
+      position: relative;
+      clip-path: path("M16 29c-0.9 0-1.8-0.3-2.5-0.9L3.4 18.3C1.2 16.2 1.2 12.7 3.4 10.6c2.2-2.2 5.7-2.2 7.9 0l1.7 1.7 1.7-1.7c2.2-2.2 5.7-2.2 7.9 0s2.2 5.7 0 7.9L18.5 28.1c-0.7 0.6-1.6 0.9-2.5 0.9z");
+      box-shadow: 0 0 12px #00f7ff, 0 0 24px #00f7ff;
+      animation: latido 1.5s infinite ease-in-out;
+    }
+
+    .frase {
+    color: #cceced;
+   font-size: 20px;
+   font-weight: bold;
+   text-shadow: 0 0 6px #00f7ff, 0 0 12px #00f7ff;
+   white-space: nowrap;
+   font-family: 'Bodoni Moda', serif;
+   }
+
+    .frase.especial {
+   font-size: 36px;
+   text-shadow: 0 0 8px #ff69b4, 0 0 20px #ff69b4;
+   color: #f1dfe8;
+   font-family: 'Bodoni Moda', serif;
+   }
+
+    @keyframes latido {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+    }
+
+    @keyframes caerDesdeClick {
+      0% {
+        transform: translateY(0) rotateX(40deg) rotateZ(-29.8deg) scale(0.6);
+        opacity: 1;
+      }
+      50% {
+        transform: translateY(50vh) rotateX(20deg) rotateZ(-29.8deg) scale(0.8);
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(100vh) rotateX(0deg) rotateZ(-29.8deg) scale(1);
+        opacity: 0.2;
+      }
+    }
+
+    .estrella {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: parpadeo 2.5s infinite alternate;
+      box-shadow: 0 0 8px #ffffff, 0 0 16px #00f7ff;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    @keyframes parpadeo {
+      0% { opacity: 0.1; }
+      100% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<script>
+  // Estrellas de fondo
+  for (let i = 0; i < 300; i++) {
+    const star = document.createElement("div");
+    star.className = "estrella";
+    star.style.left = Math.random() * window.innerWidth + "px";
+    star.style.top = Math.random() * window.innerHeight + "px";
+    const size = Math.random() * 2 + 1;
+    star.style.width = size + "px";
+    star.style.height = size + "px";
+    star.style.opacity = Math.random();
+    document.body.appendChild(star);
+  }
+
+  const frases = [
+    "Te amo",
+    "Me encantas",
+    "Tu voz me calma",
+    "Eres mi estrella",
+    "Te pienso cada noche"
+  ];
+  const fraseEspecial = "¿Aceptas ser mi novia? señorita Sancho Juarez";
+
+  function crearMensajeConCorazon(x, y) {
+    const lluvia = document.createElement("div");
+    lluvia.className = "lluvia";
+    lluvia.style.left = x + "px";
+    lluvia.style.top = y + "px";
+
+    const corazon = document.createElement("div");
+    corazon.className = "corazon-neon";
+
+    const texto = document.createElement("span");
+    texto.className = "frase";
+
+    if (Math.random() < 0.1) {
+      texto.textContent = fraseEspecial;
+      texto.classList.add("especial");
+      lluvia.style.animationDuration = "14s";
+    } else {
+      texto.textContent = frases[Math.floor(Math.random() * frases.length)];
+      lluvia.style.animationDuration = (Math.random() * 4 + 8) + "s";
+    }
+
+    lluvia.appendChild(corazon);
+    lluvia.appendChild(texto);
+    document.body.appendChild(lluvia);
+    setTimeout(() => lluvia.remove(), 16000);
+  }
+
+  // Lluvia automática
+  setInterval(() => {
+    crearMensajeConCorazon(Math.random() * window.innerWidth, -50);
+  }, 500);
+
+  // Clic interactivo
+  document.body.addEventListener("click", (e) => {
+    crearMensajeConCorazon(e.clientX, e.clientY);
+  });
+</script>
+
+</body>
+</html>
